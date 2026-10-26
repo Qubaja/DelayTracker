@@ -148,8 +148,8 @@ This is a student project and is not affiliated with VRR, Deutsche Bahn or any t
 ## 👥 Team
 
 | | Name | GitHub |
-|------|---|
+|---|---|---|
 | 👤 | Mohammed Qubaja | [@Qubaja](https://github.com/Qubaja) |
-| 👤 | Omar Almasri | [@username](https://github.com/omar-almasri-cpu) |
+| 👤 | Omar Almasri | [@omar-almasri-cpu](https://github.com/omar-almasri-cpu) |
 
 Computer science students at TU Dortmund.
