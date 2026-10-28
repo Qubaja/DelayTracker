@@ -63,8 +63,8 @@ flowchart LR
 ### Run everything with Docker
 
 ```bash
-git clone https://github.com/<org-or-user>/ruhr-transit-reliability.git
-cd ruhr-transit-reliability
+git clone https://github.com/Qubaja/Delaytracker.git
+cd DelayTracker
 cp .env.example .env        # adjust values if needed
 docker compose up --build
 ```
