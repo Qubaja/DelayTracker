@@ -1,0 +1,3 @@
+spring.datasource.url=jdbc:postgresql:base.url
+spring.datasource.username=change-me-later
+spring.datasource.password=change-me-later
