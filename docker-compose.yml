@@ -1,0 +1,47 @@
+# Start everything with: docker compose up --build
+# Passwords etc. come from the .env file (copy .env.example to get started)
+
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: delaytracker-db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5431:5432"   # 5431 on your Mac, same as application-local.properties
+    volumes:
+      - db-data:/var/lib/postgresql/data   # keeps the data after "docker compose down"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./Backend
+    container_name: delaytracker-backend
+    environment:
+      # inside Docker the DB is reachable as "db", not localhost
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy   # don't start before Postgres is ready
+    restart: unless-stopped
+
+  # TODO: turn this on once we have the Angular app
+  # frontend:
+  #   build: ./frontend
+  #   container_name: delaytracker-frontend
+  #   ports:
+  #     - "4200:80"
+  #   depends_on:
+  #     - backend
+
+volumes:
+  db-data:
