@@ -1,0 +1,63 @@
+Table agency {
+  id integer [pk]
+  name varchar [not null]
+  service_area varchar
+  gtfs_agency_id varchar [not null, unique]
+}
+Table route {
+  id integer [pk]
+  agency_id integer [not null]
+  short_name varchar [not null]
+  route_type integer [not null]
+  gtfs_route_id varchar [not null, unique]
+}
+
+Table stop {
+  id integer [pk]
+  gtfs_stop_id varchar [not null, unique]
+  name varchar [not null]
+  lat decimal [not null]
+  lon decimal [not null]
+}
+
+Table trip {
+  id integer [pk]
+  route_id integer [not null]
+  gtfs_trip_id varchar [not null, unique]
+  headsign varchar
+  direction_id integer
+}
+
+Table stop_time {
+  id integer [pk]
+  trip_id integer [not null]
+  stop_id integer [not null]
+  stop_sequence integer [not null]
+  scheduled_arrival_sec integer
+  scheduled_departure_sec integer
+
+  indexes {
+    (trip_id, stop_sequence) [unique]
+  }
+}
+
+Table delay_observation {
+  id bigint [pk]
+  trip_id integer [not null]
+  stop_id integer [not null]
+  service_date date [not null]
+  delay_seconds integer
+  fetched_at timestamptz [not null]
+
+  indexes {
+    (trip_id, stop_id, service_date) [unique]
+    fetched_at
+  }
+}
+
+Ref agency_routes: agency.id < route.agency_id
+Ref route_trips: route.id < trip.route_id
+Ref trip_stop_times: trip.id < stop_time.trip_id
+Ref stop_stop_times: stop.id < stop_time.stop_id
+Ref trip_delays: trip.id < delay_observation.trip_id
+Ref stop_delays: stop.id < delay_observation.stop_id
