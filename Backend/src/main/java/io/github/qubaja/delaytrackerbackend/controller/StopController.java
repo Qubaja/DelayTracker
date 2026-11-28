@@ -21,7 +21,7 @@ public class StopController {
 
     @GetMapping("/all")
     public List<Stop> getStops() {
-        return stopRepository.findAll();
+        return stopService.getAllStops();
     }
 
     @GetMapping("/{gtfsStopId}")
